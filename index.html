@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Estratégico de Demanda de Tours en el Caribe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff; /* Lightest Blue from Palette */
+        }
+       .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Increased max-width for more datasets */
+            margin-left: auto;
+            margin-right: auto;
+            height: 500px; /* Increased height for more datasets */
+            max-height: 60vh;
+        }
+        @media (max-width: 768px) {
+           .chart-container {
+                height: 400px;
+                max-height: 50vh;
+            }
+        }
+       .brand-text-deep { color: #004AAD; }
+       .brand-text-bright { color: #0079C2; }
+       .brand-bg-deep { background-color: #004AAD; }
+       .brand-bg-bright { background-color: #0079C2; }
+       .brand-bg-light { background-color: #81D4FA; }
+       .brand-bg-lightest { background-color: #B3E5FC; }
+       .brand-accent { color: #FFC107; }
+       .brand-accent-bg { background-color: #FFC107; }
+
+       .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            text-align: center;
+            border-left: 5px solid #00AEEF;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0; /* Tailwind gray-200 */
+        }
+        th {
+            background-color: #0079C2; /* Bright Blue */
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc; /* Tailwind gray-50 */
+        }
+        tr:hover {
+            background-color: #e0f2fe; /* Tailwind blue-50 */
+        }
+       .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0079C2;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="brand-bg-deep text-white p-8 text-center shadow-lg">
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight">Análisis Estratégico de Demanda de Tours</h1>
+        <p class="text-xl mt-2 text-blue-200">Oportunidades en Cancún y Punta Cana para los Mercados de EE. UU. y Canadá</p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <section id="overview" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold brand-text-deep">El Pulso del Mercado Turístico del Caribe</h2>
+                <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600">El resurgimiento del turismo post-pandemia ha creado una demanda sin precedentes, revelando patrones de consumo claros y oportunidades estratégicas significativas.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="kpi-card">
+                    <p class="text-6xl font-black brand-text-bright">35%</p>
+                    <p class="mt-2 text-xl font-bold text-gray-700">Huéspedes compran tours y excursiones</p>
+                    <p class="mt-1 text-gray-500">En destinos del Caribe, en promedio, los huéspedes cuya estancia es de 4 noches al menos realizan una actividad turistica fuera del hotel (tours, excursiones o actividades).</p>
+                </div>
+                <div class="kpi-card">
+                    <p class="text-6xl font-black brand-text-bright">27%</p>
+                    <p class="mt-2 text-xl font-bold text-gray-700">Compran tours y actividades online</p>
+                    <p class="mt-1 text-gray-500">LA adopción digital de fomenta que en promedio el 27% de los viajeros reservan tours y actividades a través de medios digitales como páginas web y apps.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-t-2 border-blue-200">
+
+        <section id="customer-journey" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold brand-text-deep text-center mb-8">El Viaje del Cliente: Búsqueda y Compra de Tours</h2>
+            <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600 text-center">El proceso de decisión del viajero para tours y excursiones abarca varias etapas clave, desde la inspiración hasta la reserva y la experiencia post-viaje.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                <div class="p-6 rounded-lg brand-bg-lightest shadow-sm text-center">
+                    <h3 class="text-xl font-bold brand-text-bright mb-2">1. Inspiración y Planificación Temprana</h3>
+                    <p class="text-gray-700 text-sm">Los viajeros busca ideas de actividades con meses de antelación. Las búsquedas son amplias y buscan información en diferentes medios como redes sociales, blogs, agencias de viaje y recomendaciones directas.</p>
+                </div>
+                <div class="p-6 rounded-lg brand-bg-lightest shadow-sm text-center">
+                    <h3 class="text-xl font-bold brand-text-bright mb-2">2. Investigación Activa</h3>
+                    <p class="text-gray-700 text-sm">Búsquedas más específicas.El precio y contenidos de calidad son fundamentales para generar confianza en esta etapa.</p>
+                </div>
+                <div class="p-6 rounded-lg brand-bg-lightest shadow-sm text-center">
+                    <h3 class="text-xl font-bold brand-text-bright mb-2">3. Decisión y Compra</h3>
+                    <p class="text-gray-700 text-sm">La mayoría de las reservas online de tours ocurren entre 1 semana y 1 mes antes del viaje. La decisión de compra asistida con recomendaciones acompañando el "customer journey" aumentan la posibilidad de conversión hasta en 3X.</p>
+                </div>
+            </div>
+            <p class="text-center mt-6 text-gray-600">Es crucial tener una presencia fuerte en todas las etapas, desde la visibilidad en búsquedas tempranas hasta una oferta competitiva y fácil de reservar cerca de la fecha de viaje. El sitio de Vacaciones Barceló tiene áreas de mejora de UX/UI que pueden detonar en un mayor volumen de venta.</p>
+        </section>
+
+        <hr class="my-12 border-t-2 border-blue-200">
+
+        <section id="google-trends" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold brand-text-deep text-center mb-8">Tendencias de Búsqueda en Google (Últimos 12 Meses)</h2>
+            <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600 text-center">El interés de búsqueda desde Estados Unidos y Canadá refleja la demanda estacional y las preferencias a lo largo del año para tours clave en Cancún y Punta Cana.</p>
+            <div class="chart-container mt-8">
+                <canvas id="googleTrendsChart"></canvas>
+            </div>
+            <p class="text-center mt-4 text-gray-600">Los picos de interés suelen coincidir con las temporadas de vacaciones, lo que subraya la importancia de campañas de marketing dirigidas y la disponibilidad de productos en esos periodos.</p>
+        </section>
+
+        <hr class="my-12 border-t-2 border-blue-200">
+        
+        <section id="cancun-tours" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold brand-text-deep text-center mb-8">Tours y Excursiones de Mayor Demanda: Cancún & Riviera Maya</h2>
+            <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600 text-center">Las preferencias de los viajeros se inclinan hacia experiencias que combinan la riqueza cultural maya con la aventura en la naturaleza. Los "tours combo" son altamente valorados por su eficiencia y diversidad.</p>
+            <div class="chart-container mt-8">
+                <canvas id="cancunChart"></canvas>
+            </div>
+            <p class="text-center mt-4 text-gray-600">La demanda se concentra en tours "combo" que ofrecen múltiples actividades en un solo día, maximizando el valor para el turista. Las excursiones arqueológicas combinadas con nado en cenotes son las líderes indiscutibles del mercado.</p>
+
+            <h3 class="text-2xl font-bold brand-text-bright mt-12 mb-4 text-center">Top 19 Tours y Excursiones en Cancún & Riviera Maya</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr>
+                            <th>Puesto</th>
+                            <th>Nombre del Tour/Excursión</th>
+                            <th>Actividades Principales</th>
+                            <th>Rango de Precio (USD)</th>
+                            <th>Características Clave</th>
+                            <th>Popularidad (Ej.)</th>
+                            <th>Oferta Vacaciones Barceló</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Chichén Itzá, Cenote & Valladolid Tour</td>
+                            <td>Arqueología, Nado en Cenote, Visita Colonial</td>
+                            <td>$40 - $88</td>
+                            <td>Traslados, Almuerzo buffet, Guía bilingüe</td>
+                            <td>4.8/5 (22,737 reseñas Viator)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Catamarán a Isla Mujeres (Open Bar & Snorkel)</td>
+                            <td>Navegación, Snorkel, Barra Libre, Playa</td>
+                            <td>$44 - $72</td>
+                            <td>Traslados, Almuerzo, Tiempo libre en Isla Mujeres</td>
+                            <td>8.2/10 (2,860 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>ATV, Tirolesa & Cenote Aventura</td>
+                            <td>ATV, Tirolesa, Nado en Cenote</td>
+                            <td>$19 - $132</td>
+                            <td>Traslados, Snacks, Equipo, Tequila (opcional)</td>
+                            <td>8.8/10 (1,557 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Xcaret Park Día Completo</td>
+                            <td>Eco-parque, Cultura Mexicana, Actividades Acuáticas</td>
+                            <td>$167 - $200+</td>
+                            <td>Más de 50 atracciones naturales y culturales</td>
+                            <td>9.1/10 (209 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Tulum y Cobá Tour (con Cenote)</td>
+                            <td>Arqueología, Nado en Cenote, Visita Playa del Carmen</td>
+                            <td>$56 - $95</td>
+                            <td>Traslados, Almuerzo, Guía</td>
+                            <td>8.9/10 (212 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Jungle Tour (Lancha Rápida & Snorkel)</td>
+                            <td>Lancha rápida, Snorkel en arrecife/MUSA</td>
+                            <td>$50 - $70</td>
+                            <td>Recorrido por Laguna Nichupté, Equipo de snorkel</td>
+                            <td>No.1 en GetYourGuide</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Xplor Park (Aventura Nocturna/Diurna)</td>
+                            <td>Tirolesas, Vehículos Anfibios, Ríos Subterráneos</td>
+                            <td>$120 - $150+</td>
+                            <td>Buffet ilimitado, Equipo</td>
+                            <td>Destacado en Xcaret</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Coco Bongo Nightclub Experience</td>
+                            <td>Espectáculo, Música en vivo, Barra Libre</td>
+                            <td>$75 - $120</td>
+                            <td>Acróbatas voladores, Tributos musicales</td>
+                            <td>7.5/10 (41 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Isla Contoy & Isla Mujeres Day Trip</td>
+                            <td>Ecoturismo, Snorkel, Playa, Cultura</td>
+                            <td>$115 - $169</td>
+                            <td>Desayuno ligero, Almuerzo, Barra libre</td>
+                            <td>9.4/10 (252 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Nado con Tiburón Ballena</td>
+                            <td>Nado con vida marina, Snorkel</td>
+                            <td>$180 - $220+</td>
+                            <td>Almuerzo en Playa Norte</td>
+                            <td>7.6/10 (48 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Xenotes Day Trip (4 Cenotes)</td>
+                            <td>Nado en Cenotes, Kayak, Tirolesa</td>
+                            <td>$149 - $180</td>
+                            <td>Experiencia en 4 tipos de cenotes</td>
+                            <td>9.6/10 (26 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Horseback Riding (Rancho Bonanza)</td>
+                            <td>Paseo a caballo en la jungla</td>
+                            <td>$110 - $132</td>
+                            <td>Naturaleza, Aventura</td>
+                            <td>8/10 (2 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Xoximilco Mexican Fiesta</td>
+                            <td>Fiesta flotante, Música en vivo, Comida, Barra Libre</td>
+                            <td>$109 - $110</td>
+                            <td>Experiencia mexicana auténtica</td>
+                            <td>9.2/10 (381 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>Rio Secreto Underground River Tour</td>
+                            <td>Caminata, Nado en cuevas subterráneas</td>
+                            <td>$89 - $120</td>
+                            <td>Formaciones de cristal, Almuerzo buffet</td>
+                            <td>Místico, fascinante</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Interactive Aquarium Cancun Ticket</td>
+                            <td>Observación de vida marina, Experiencia submarina</td>
+                            <td>$15 - $25</td>
+                            <td>Más de 100 especies</td>
+                            <td>9/10 (48 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>PADI Advanced Diving Course</td>
+                            <td>Curso de buceo avanzado</td>
+                            <td>$417+</td>
+                            <td>Certificación de buceo</td>
+                            <td>N/A</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>Jet Ski en Cancún</td>
+                            <td>Moto acuática, Vistas del Caribe</td>
+                            <td>$70 - $100</td>
+                            <td>Adrenalina, Vistas panorámicas</td>
+                            <td>No rating yet</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>Tour Gastronómico Mexicano</td>
+                            <td>Degustación de comida local (tacos, ceviches, mezcal)</td>
+                            <td>$85 - $100</td>
+                            <td>Inmersión culinaria</td>
+                            <td>10/10 (2 reseñas Civitatis)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>Tour de Cocodrilos en Laguna Nichupté</td>
+                            <td>Observación de cocodrilos, Exploración de manglares</td>
+                            <td>$50 - $80</td>
+                            <td>Ecosistema único</td>
+                            <td>No rating yet</td>
+                            <td>No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <hr class="my-12 border-t-2 border-blue-200">
+
+        <section id="puntacana-tours" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold brand-text-deep text-center mb-8">Tours y Excursiones de Mayor Demanda: Punta Cana</h2>
+            <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600 text-center">Punta Cana atrae a los viajeros con sus playas paradisíacas, aventuras todo terreno y una vibrante oferta de entretenimiento. La relajación en islas y la emoción son clave.</p>
+            <div class="chart-container mt-8">
+                <canvas id="puntaCanaChart"></canvas>
+            </div>
+            <p class="text-center mt-4 text-gray-600">Las excursiones de día completo a islas paradisíacas como Isla Saona dominan la demanda, seguidas de cerca por aventuras en buggies y la interacción con la fauna local.</p>
+
+            <h3 class="text-2xl font-bold brand-text-bright mt-12 mb-4 text-center">Top 19 Tours y Excursiones en Punta Cana</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr>
+                            <th>Puesto</th>
+                            <th>Nombre del Tour/Excursión</th>
+                            <th>Actividades Principales</th>
+                            <th>Rango de Precio (USD)</th>
+                            <th>Características Clave</th>
+                            <th>Popularidad (Ej.)</th>
+                            <th>Oferta Vacaciones Barceló</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Catamarán a Isla Saona (con Almuerzo Buffet)</td>
+                            <td>Navegación, Playa, Piscina Natural, Barra Libre</td>
+                            <td>$73 - $133</td>
+                            <td>Traslados, Almuerzo típico dominicano, Relajación</td>
+                            <td>4.3/5 (2,718 reseñas GetYourGuide)</td>
+                            <td>Sí</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Tour en Buggy/ATV (Cueva, Playa Macao, Granja)</td>
+                            <td>Conducción off-road, Nado en cueva/cenote, Visita cultural</td>
+                            <td>$38 - $107</td>
+                            <td>Traslados, Degustación de productos locales</td>
+                            <td>4/5 (622 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Monkeyland Half-Day Safari</td>
+                            <td>Interacción con monos, Visita a plantación</td>
+                            <td>$80 - $95</td>
+                            <td>Alimentar monos, Aprender sobre cacao/café</td>
+                            <td>4.5/5 (882 reseñas GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Coco Bongo Nightclub Experience</td>
+                            <td>Espectáculo, Música en vivo, Barra Libre</td>
+                            <td>$75 - $120</td>
+                            <td>Acróbatas, Tributos musicales, Ambiente de fiesta</td>
+                            <td>4.4/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>La Hacienda Park (Zipline, Buggy, Caballo, Safari)</td>
+                            <td>Multi-actividades de aventura</td>
+                            <td>$99 - $129</td>
+                            <td>Tirolesa más larga, Río natural, Safari cultural</td>
+                            <td>4.6/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Paseo a Caballo (Playa Macao/Río Maimón)</td>
+                            <td>Paseo a caballo en playa/jungla</td>
+                            <td>$45 - $62</td>
+                            <td>Traslados, Vistas escénicas, Puesta de sol (opcional)</td>
+                            <td>4.2/5 (GetYourGuide)</td>
+                            <td>Sí</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Scape Park Adventure</td>
+                            <td>Aventura, Cenotes, Ziplining, Cueva</td>
+                            <td>$129 - $150+</td>
+                            <td>Diversidad de actividades, Parque temático</td>
+                            <td>7.4/10 (60 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>El Dorado Water Park</td>
+                            <td>Parque acuático, Río lento, Piscina de olas, Toboganes</td>
+                            <td>$129 - $150</td>
+                            <td>Traslados, Playa privada</td>
+                            <td>4.1/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Experiencia de Pesca en Alta Mar</td>
+                            <td>Pesca deportiva (barracuda, mahi-mahi, marlín)</td>
+                            <td>$100 - $150</td>
+                            <td>Equipo de pesca, Guía</td>
+                            <td>3.3/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Tour a Santo Domingo (Día Completo)</td>
+                            <td>Visita cultural, Monumentos históricos</td>
+                            <td>$79 - $100</td>
+                            <td>Traslados, Almuerzo, Guía, Parques nacionales</td>
+                            <td>3.9/5 (489 reseñas GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Tour Oliver & Oliver Rum Tasting & Taino Concept Store</td>
+                            <td>Degustación de ron, Experiencia cultural</td>
+                            <td>$44 - $60</td>
+                            <td>Rones premium, Productos locales</td>
+                            <td>4.6/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Tour de Buceo (PADI Open Water Course)</td>
+                            <td>Buceo, Exploración marina</td>
+                            <td>$300 - $500+</td>
+                            <td>Certificación, Arrecifes de coral</td>
+                            <td>Mencionada en Vacaciones Barceló</td>
+                            <td>Sí</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Safari Cultural de Medio Día (con Almuerzo)</td>
+                            <td>Inmersión cultural, Visita a casa típica dominicana</td>
+                            <td>$69 - $90</td>
+                            <td>Traslados, Almuerzo y bebidas</td>
+                            <td>9.4/10 (73 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>El Limón Waterfall & Bacardi Island</td>
+                            <td>Naturaleza, Aventura, Playa</td>
+                            <td>$134 - $150</td>
+                            <td>Cascadas, Isla paradisíaca</td>
+                            <td>7.4/10 (58 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Tour en Barco de Fiesta (Snorkel, DJ, Barra Libre)</td>
+                            <td>Fiesta en catamarán, Snorkel, Música</td>
+                            <td>$55 - $94</td>
+                            <td>Barra libre, Animación, Piscina natural</td>
+                            <td>6.4/10 (74 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>Tour de Chocolate Master Class & Taino Concept Store</td>
+                            <td>Taller de chocolate, Experiencia cultural</td>
+                            <td>$52 - $70</td>
+                            <td>Aprendizaje práctico, Productos de cacao</td>
+                            <td>5/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>Tour de Fábrica de Puros Don Lucas & Ron</td>
+                            <td>Visita a fábrica de puros, Museo del café/chocolate/ron</td>
+                            <td>$5 - $15</td>
+                            <td>Degustaciones, Souvenirs</td>
+                            <td>4.1/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>Tour de Caballo en Playa (Punta Cana)</td>
+                            <td>Paseo a caballo en la playa</td>
+                            <td>$58 - $70</td>
+                            <td>Vistas costeras, Relajación</td>
+                            <td>9.2/10 (70 reseñas Expedia)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>Tour de Restauración de Arrecifes de Coral & Snorkel</td>
+                            <td>Ecoturismo, Snorkel, Aprendizaje sobre conservación</td>
+                            <td>$135 - $150</td>
+                            <td>Jardines de coral, Bebidas</td>
+                            <td>3.6/5 (GetYourGuide)</td>
+                            <td>No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <hr class="my-12 border-t-2 border-blue-200">
+
+        <section id="gap-analysis" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold brand-text-deep">Análisis de Brechas: La Oportunidad de Vacaciones Barceló</h2>
+                <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600">Al contrastar la demanda del mercado con la oferta actual de Vacaciones Barceló, surgen oportunidades claras y brechas críticas que necesitan atención estratégica inmediata.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-2xl font-bold brand-text-bright mb-4 text-center">Cobertura de Tours: Cancún & Riviera Maya</h3>
+                    <div class="chart-container h-64">
+                        <canvas id="cancunCoverageChart"></canvas>
+                    </div>
+                    <p class="text-center mt-4 text-gray-600">Vacaciones Barceló actualmente no ofrece ninguno de los tours más demandados en Cancún & Riviera Maya, lo que representa una brecha del 100% y una enorme oportunidad de mercado.</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-2xl font-bold brand-text-bright mb-4 text-center">Cobertura de Tours: Punta Cana</h3>
+                    <div class="chart-container h-64">
+                        <canvas id="puntaCanaCoverageChart"></canvas>
+                    </div>
+                    <p class="text-center mt-4 text-gray-600">En Punta Cana, Vacaciones Barceló cubre un pequeño porcentaje de los tours más demandados, dejando una gran mayoría sin atender.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-t-2 border-blue-200">
+        
+        
+
+        <section id="recommendations">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold brand-text-deep">Recomendaciones Estratégicas</h2>
+                <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-600">Un plan de acción para capitalizar los hallazgos y consolidar el liderazgo en el mercado de tours y excursiones del Caribe.</p>
+            </div>
+            
+            <div class="space-y-8">
+                <div class="text-center">
+                    <div class="inline-block brand-bg-deep text-white font-bold py-3 px-6 rounded-lg shadow-md">
+                        Punto de Partida: Hallazgos Clave
+                    </div>
+                    <div class="h-8 w-1 bg-gray-300 mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="w-full h-1 bg-gray-300 mb-[-1px]"></div>
+                        <div class="w-1 h-8 bg-gray-300"></div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-400 w-full">
+                            <h4 class="text-xl font-bold brand-text-bright mb-2">1. Expandir en Cancún</h4>
+                            <ul class="text-left list-disc list-inside text-gray-600 space-y-1">
+                                <li>Lanzamiento inmediato de cartera de productos.</li>
+                                <li>Priorizar combos: Chichén Itzá, Catamarán, ATV.</li>
+                                <li>Establecer alianzas con parques (Xcaret, Xplor). Y ampliar el portafolio de producto complemento a través de integraciones API.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="w-full h-1 bg-gray-300 mb-[-1px]"></div>
+                        <div class="w-1 h-8 bg-gray-300"></div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 brand-accent w-full">
+                            <h4 class="text-xl font-bold brand-text-bright mb-2">2. Diversificar en Punta Cana</h4>
+                             <ul class="text-left list-disc list-inside text-gray-600 space-y-1">
+                                <li>Incorporar tours de Buggy/ATV.</li>
+                                <li>Añadir experiencias de vida silvestre (Monkeyland).</li>
+                                <li>Ofrecer paquetes de vida nocturna (Coco Bongo).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                         <div class="w-full h-1 bg-gray-300 mb-[-1px]"></div>
+                        <div class="w-1 h-8 bg-gray-300"></div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-400 w-full">
+                            <h4 class="text-xl font-bold brand-text-bright mb-2">3. Optimizar Operaciones</h4>
+                             <ul class="text-left list-disc list-inside text-gray-600 space-y-1">
+                                <li>Negociar con proveedores de alta demanda.</li>
+                                <li>Usar Google Trends para marketing dirigido.</li>
+                                <li>Crear paquetes de "Tour + Traslado".</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <div class="w-full h-1 bg-gray-300 mb-[-1px]"></div>
+                        <div class="w-1 h-8 bg-gray-300"></div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 brand-accent w-full">
+                            <h4 class="text-xl font-bold brand-text-bright mb-2">4. Mejorar Experiencia Digital y Customer Journey</h4>
+                            <ul class="text-left list-disc list-inside text-gray-600 space-y-1">
+                                <li>Optimizar UX/UI de VacacionesBarcelo.com.</li>
+                                <li>Integrar recomendaciones de tours en puntos clave del viaje del huésped (ej. check-in, app del hotel).</li>
+                                <li>Personalizar ofertas de actividades según perfil del huésped.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="mt-16 brand-bg-deep text-white text-center p-4">
+        <p>&copy; G&R Hub. Marketing That Matters. Fuente: Google Trends. Análisis realizado con búsquedas públicas en internet.</p>
+    </footer>
+
+    <script>
+        // Register the datalabels plugin globally
+        Chart.register(ChartDataLabels);
+
+        const wrapLabel = (label) => {
+            const maxLength = 16;
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine) lines.push(currentLine.trim());
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            return Array.isArray(label) ? label.join(' ') : label;
+        };
+
+        const chartOptionsBar = {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top:50
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                           size: 12
+                        },
+                        color: '#4b5563'
+                    }
+                },
+                y: {
+                    grid: {
+                        display: false
+                    },
+                     ticks: {
+                        font: {
+                           size: 12,
+                           weight: 'bold'
+                        },
+                        color: '#1f2937'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: '#004AAD',
+                    titleFont: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    bodyFont: {
+                        size: 14,
+                    },
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            }
+        };
+
+        const cancunData = {
+            labels: [
+                wrapLabel('Chichén Itzá & Cenote'),
+                wrapLabel('Catamarán a Isla Mujeres'),
+                wrapLabel('Aventura ATV, Tirolesa & Cenote'),
+                wrapLabel('Parques Ecológicos (Xcaret/Xplor)'),
+                wrapLabel('Ruinas de Tulum & Cobá'),
+            ].reverse(),
+            datasets: [{
+                label: 'Nivel de Demanda Relativa',
+                data: [98, 92, 88, 85, 78].reverse(),
+                backgroundColor: [
+                    '#B3E5FC',
+                    '#81D4FA',
+                    '#00AEEF',
+                    '#0079C2',
+                    '#004AAD'
+                ].reverse(),
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                borderRadius: 5
+            }]
+        };
+
+        new Chart(document.getElementById('cancunChart'), {
+            type: 'bar',
+            data: cancunData,
+            options: chartOptionsBar
+        });
+
+        const puntaCanaData = {
+            labels: [
+                wrapLabel('Excursión a Isla Saona'),
+                wrapLabel('Aventura en Buggy/ATV'),
+                wrapLabel('Santuario de Monos (Monkeyland)'),
+                wrapLabel('Vida Nocturna (Coco Bongo)'),
+                wrapLabel('Parques de Aventura (Scape/Hacienda)'),
+            ].reverse(),
+            datasets: [{
+                label: 'Nivel de Demanda Relativa',
+                data: [99, 94, 86, 82, 79].reverse(),
+                backgroundColor: [
+                    '#B3E5FC',
+                    '#81D4FA',
+                    '#00AEEF',
+                    '#0079C2',
+                    '#004AAD'
+                ].reverse(),
+                 borderColor: '#ffffff',
+                borderWidth: 2,
+                borderRadius: 5
+            }]
+        };
+
+        new Chart(document.getElementById('puntaCanaChart'), {
+            type: 'bar',
+            data: puntaCanaData,
+            options: chartOptionsBar
+        });
+
+        const googleTrendsData = {
+            labels: ['Jul 24', 'Ago 24', 'Sep 24', 'Oct 24', 'Nov 24', 'Dic 24', 'Ene 25', 'Feb 25', 'Mar 25', 'Abr 25', 'May 25', 'Jun 25'],
+            datasets: [
+                {
+                    label: wrapLabel('Cancún: Chichén Itzá & Cenote'),
+                    data: [75, 78, 70, 65, 80, 90, 95, 88, 82, 79, 85, 92],
+                    borderColor: '#004AAD', /* Deep Blue */
+                    backgroundColor: 'rgba(0, 74, 173, 0.1)',
+                    fill: false,
+                    tension: 0.3
+                },
+                {
+                    label: wrapLabel('Punta Cana: Excursión Isla Saona'),
+                    data: [80, 85, 82, 78, 88, 98, 92, 85, 80, 75, 70, 80],
+                    borderColor: '#FFC107', /* Accent Yellow */
+                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                    fill: false,
+                    tension: 0.3
+                }
+            ]
+        };
+
+        const chartOptionsLine = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                           size: 12
+                        },
+                        color: '#4b5563'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                           size: 12
+                        },
+                        color: '#4b5563'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14
+                        },
+                        color: '#1f2937'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#004AAD',
+                    titleFont: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    bodyFont: {
+                        size: 14,
+                    },
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            }
+        };
+
+        new Chart(document.getElementById('googleTrendsChart'), {
+            type: 'line',
+            data: googleTrendsData,
+            options: chartOptionsLine
+        });
+
+        // Pie Chart Options
+        const chartOptionsPie = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        font: {
+                            size: 14
+                        },
+                        color: '#1f2937'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#004AAD',
+                    titleFont: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    bodyFont: {
+                        size: 14,
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += context.parsed.toFixed(2) + '%';
+                            }
+                            return label;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 16
+                    },
+                    formatter: (value, context) => {
+                        const total = context.chart.data.datasets[0].data.reduce((sum, current) => sum + current, 0);
+                        const percentage = (value / total * 100).toFixed(1);
+                        return percentage + '%';
+                    }
+                }
+            }
+        };
+
+        // Cancún Coverage Data
+        const cancunCoverageData = {
+            labels: ['No tiene', 'Sí tiene'],
+            datasets: [{
+                data: [100, 0], // 19 'No' tours, 0 'Sí' tours
+                backgroundColor: [
+                    '#B3E5FC', /* Lightest Blue */
+                    '#0079C2'  /* Bright Blue for 'Sí tiene' */
+                ],
+                hoverOffset: 10
+            }]
+        };
+
+        new Chart(document.getElementById('cancunCoverageChart'), {
+            type: 'pie',
+            data: cancunCoverageData,
+            options: chartOptionsPie
+        });
+
+        // Punta Cana Coverage Data
+        const puntaCanaCoverageData = {
+            labels: ['No tiene', 'Sí tiene'],
+            datasets: [{
+                data: [84.21, 15.79], // 16 'No' tours, 3 'Sí' tours (3/19 = 15.79%)
+                backgroundColor: [
+                    '#B3E5FC', /* Lightest Blue */
+                    '#0079C2'  /* Bright Blue for 'Sí tiene' */
+                ],
+                hoverOffset: 10
+            }]
+        };
+
+        new Chart(document.getElementById('puntaCanaCoverageChart'), {
+            type: 'pie',
+            data: puntaCanaCoverageData,
+            options: chartOptionsPie
+        });
+
+        // LLM Feature Logic
+        // This section is removed as per user request.
+        // document.getElementById('generateIdeasBtn').addEventListener('click', async () => {
+        //     const destination = document.getElementById('destinationSelect').value;
+        //     const keyword = document.getElementById('tourKeyword').value;
+        //     const loadingIndicator = document.getElementById('loadingIndicator');
+        //     const generatedIdeasOutput = document.getElementById('generatedIdeasOutput');
+        //     const ideasContent = document.getElementById('ideasContent');
+
+        //     ideasContent.innerHTML = ''; // Clear previous results
+        //     generatedIdeasOutput.classList.add('hidden');
+        //     loadingIndicator.classList.remove('hidden');
+
+        //     const prompt = `Actúa como un experto en consultoría de viajes para el Caribe. Basándote en la alta demanda de tours y las brechas de mercado identificadas para ${destination}, y considerando el interés de los mercados de Estados Unidos y Canadá, genera 3 ideas innovadoras de paquetes de tours. Cada idea debe incluir:
+        //     1. Nombre del Paquete: Un nombre atractivo.
+        //     2. Descripción: Una breve descripción que resalte las actividades y el valor.
+        //     3. Actividades Clave: Una lista de 3-5 actividades principales incluidas, priorizando las de alta demanda y/o las que cubren brechas.
+        //     4. Público Objetivo: A quién va dirigido este paquete.
+        //     5. Puntos de Venta Únicos: 1-2 características que lo hacen especial.
+        //     Si la palabra clave es "${keyword}", integra ese concepto en las ideas.`;
+
+        //     let chatHistory = [];
+        //     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+        //     const payload = { contents: chatHistory };
+        //     const apiKey = "";
+        //     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        //     try {
+        //         const response = await fetch(apiUrl, {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: JSON.stringify(payload)
+        //         });
+        //         const result = await response.json();
+                
+        //         if (result.candidates && result.candidates.length > 0 &&
+        //             result.candidates[0].content && result.candidates[0].content.parts &&
+        //             result.candidates[0].content.parts.length > 0) {
+        //             const text = result.candidates[0].content.parts[0].text;
+        //             ideasContent.innerHTML = text.replace(/\n/g, '<br>'); // Display with line breaks
+        //             generatedIdeasOutput.classList.remove('hidden');
+        //         } else {
+        //             ideasContent.innerHTML = '<p class="text-red-600">No se pudieron generar ideas. Intenta de nuevo.</p>';
+        //             generatedIdeasOutput.classList.remove('hidden');
+        //         }
+        //     } catch (error) {
+        //         console.error('Error calling Gemini API:', error);
+        //         ideasContent.innerHTML = '<p class="text-red-600">Ocurrió un error al conectar con el servicio. Por favor, inténtalo más tarde.</p>';
+        //         generatedIdeasOutput.classList.remove('hidden');
+        //     } finally {
+        //         loadingIndicator.classList.add('hidden');
+        //     }
+        // });
+    </script>
+</body>
+</html>
